@@ -15,9 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if(checkingIfThereIstext) {
       //make a list new list each time we submit
       const newUl = document.createElement('li');
-      createTask(grabbingTheDescription,newUl)
       //attach the descripton to the list
       newUl.append(grabbingTheDescription.value)
+      //create the task
+      createTask(grabbingTheDescription,newUl)
+      grabbingTheDescription.value = " "
       //show it on the list
       tasks.append(newUl)
     }
@@ -25,22 +27,48 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(grabbingTheDescription.value)
    
   })
-  tasks.addEventListener('click', e => {
-    console.log(e.target)
-  })
+  tasks.addEventListener('click', function(e) {
+    if(e.target.nodeName === "BUTTON") {
+      if(e.target.id === "description"){
+        deleteTask(e)
+        return
+      }
+      if(e.target.id === "check-mark"){
+        makeAsDone(e)
+        console.log("making as done ")
+        return
+      }
+    }
+  });
 
 
 });
 
 const createTask = (task,parentList) => {
     const removeTask = document.createElement('button');
+    const doneTask = document.createElement('button');
+    doneTask.id = "check-mark"
+    doneTask.textContent = "✔"
+    removeTask.id = "description"
     removeTask.textContent = "x"
     parentList.append(removeTask)
+    parentList.append(doneTask)
     taskList.push(task)
     console.log(taskList)
 }
 
-const deleteTask =  (task) => {
+const deleteTask =  (e) => {
+  let item =  e.target.parentNode;
+      item.remove()
+}
+
+const makeAsDone = (e) => {
+  let item = e.target.parentNode
+  if(item.style.textDecoration == 'line-through'){
+    item.style.textDecoration = 'none'
+  }else{
+    item.style.textDecoration = 'line-through'
+  }
 
 }
 
